@@ -20,9 +20,11 @@ namespace CourseScheduler
         public bool hasPrerequisite;
         public string major;
         public int capacity;
+        public int level;
+
 
         public Course(int courseID, string name, int credits, bool needsLabRoom, bool needsLargeRoom,
-            bool isElective, bool hasPrerequisite, string major, int capacity)
+            bool isElective, bool hasPrerequisite, string major, int capacity, int level)
         {
             this.courseID = courseID;
             this.name = name;
@@ -33,6 +35,7 @@ namespace CourseScheduler
             this.hasPrerequisite = hasPrerequisite;
             this.major = major;
             this.capacity = capacity;
+            this.level = level;
         }
     }
 
@@ -41,22 +44,22 @@ namespace CourseScheduler
     /// </summary>
     class PossibleCourse
     {
-        public int courseID;
-        public int instructorID;
-        public TimeSpan timeOffered;
-        public DateTime datesOffered;
-        public int scheduleID;
-        public string roomID;
+        public Course course;
+        public Instructor instructor;
+        public int startTime;
+        public int endTime;
+        public string datesOffered;
+        public Room room;
 
-        public PossibleCourse(int courseID, int instructorID, TimeSpan timeOffered,
-            DateTime datesOffered, int scheduleID, string roomID)
+        public PossibleCourse(Course course, Instructor instructor, int startTime,
+            int endTime, string datesOffered, Room room)
         {
-            this.courseID = courseID;
-            this.instructorID = instructorID;
-            this.timeOffered = timeOffered;
+            this.course = course;
+            this.instructor = instructor;
+            this.startTime = startTime;
+            this.endTime = endTime;
             this.datesOffered = datesOffered;
-            this.scheduleID = scheduleID;
-            this.roomID = roomID;
+            this.room = room;
         }
     }
 
@@ -67,10 +70,13 @@ namespace CourseScheduler
     {
         public int instructorID;
         public string name;
-        public Instructor(string name, int instructorID)
+        public int maxCourses;
+
+        public Instructor(string name, int instructorID, int maxCourses)
         {
             this.instructorID = instructorID;
             this.name = name;
+            this.maxCourses = maxCourses;
         }
     }
 
@@ -104,12 +110,31 @@ namespace CourseScheduler
         public string roomID;
         public bool isLarge;
         public bool isLab;
+        public Dictionary<String, bool> roomAvailbility = new Dictionary<string, bool>();
 
         public Room(string roomID, bool isLarge, bool isLab)
         {
             this.roomID = roomID;
             this.isLarge = isLarge;
             this.isLab = isLab;
+        }
+
+        public void initializeRoomAvailablity(int startFirstLecture, int startLastLecture)
+        {
+            int start = startFirstLecture;
+            string days = "MW";
+            for (; startFirstLecture < startLastLecture; startFirstLecture += 2)
+            {
+                string key = days + startFirstLecture;
+                roomAvailbility.Add(key, true);
+            }
+            days = "TTH";
+            startFirstLecture = start;
+            for (; startFirstLecture < startLastLecture; startFirstLecture += 2)
+            {
+                string key = days + startFirstLecture;
+                roomAvailbility.Add(key, true);
+            }
         }
     }
 
@@ -118,14 +143,22 @@ namespace CourseScheduler
     /// </summary>
     class Schedule
     {
-        public List<Course> courseList;
+        public List<PossibleCourse> possibleCourses;
         public int score;
+        public int scheduleID;
+        static int idCounter = 0;
 
-        public Schedule(List<Course> courseList, int score)
+        public Schedule(List<PossibleCourse> possibleCourses, int score)
         {
-            this.courseList = courseList;
+            this.possibleCourses = possibleCourses;
             this.score = score;
+            setID();
+        }
+
+        void setID()
+        {
+            idCounter++;
+            this.scheduleID = idCounter;
         }
     }
-
 }
