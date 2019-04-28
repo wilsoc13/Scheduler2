@@ -119,7 +119,7 @@ namespace CourseScheduler
                     {
                         var line = reader.ReadLine();
                         var values = line.Split(',');
-                        dataBaseHandler.InsertNewInstructor(values[0]);
+                        dataBaseHandler.InsertNewInstructor(values[0], Convert.ToInt32(values[2]));
                     }
                 }
 
@@ -250,7 +250,9 @@ namespace CourseScheduler
             List<Course> courses = new List<Course>();
             foreach (var row in dataBaseHandler.DataSet.Courses)
             {
-                courses.Add(new Course(row.CourseID, row.Name, row.Credits, row.NeedsLabRoom, row.NeedsLargeRoom, row.IsElective, row.Hasrerequisite, row.Major, row.Capacity));
+                Course course = new Course(row.CourseID, row.Name, row.Credits, row.NeedsLabRoom, row.NeedsLargeRoom,row.IsElective,row.Hasrerequisite,row.Major,row.Capacity);
+                //How to go about storing class level?
+                courses.Add(course);
             }
 
             return courses;
@@ -261,7 +263,8 @@ namespace CourseScheduler
             List<Instructor> instructors = new List<Instructor>();
             foreach (var row in dataBaseHandler.DataSet.Instructors)
             {
-                instructors.Add(new Instructor(row.Name, row.InstructorID));
+                //Add instructor max courses column
+                instructors.Add(new Instructor(row.Name, row.InstructorID,row.maxClasses));
             }
 
             return instructors;
@@ -284,9 +287,27 @@ namespace CourseScheduler
             List<PossibleCourse> possibleCourses = new List<PossibleCourse>();
             foreach (var row in dataBaseHandler.DataSet.PossibleCourses)
             {
-                possibleCourses.Add(new PossibleCourse(row.CourseID, row.InstructorID, row.TimeOffered, row.DateOffered, 42, row.RoomID));
-            }
+                Course course = new Course(dataBaseHandler.DataSet.Courses.FindByCourseID(row.CourseID).CourseID,
+                                           dataBaseHandler.DataSet.Courses.FindByCourseID(row.CourseID).Name,
+                                           dataBaseHandler.DataSet.Courses.FindByCourseID(row.CourseID).Credits,
+                                           dataBaseHandler.DataSet.Courses.FindByCourseID(row.CourseID).NeedsLabRoom,
+                                           dataBaseHandler.DataSet.Courses.FindByCourseID(row.CourseID).NeedsLargeRoom,
+                                           dataBaseHandler.DataSet.Courses.FindByCourseID(row.CourseID).IsElective,
+                                           dataBaseHandler.DataSet.Courses.FindByCourseID(row.CourseID).Hasrerequisite,
+                                           dataBaseHandler.DataSet.Courses.FindByCourseID(row.CourseID).Major,
+                                           dataBaseHandler.DataSet.Courses.FindByCourseID(row.CourseID).Capacity);
+                Instructor instructor = new Instructor(dataBaseHandler.DataSet.Instructors.FindByInstructorID(row.InstructorID).Name,
+                                           dataBaseHandler.DataSet.Instructors.FindByInstructorID(row.InstructorID).InstructorID,
+                                           dataBaseHandler.DataSet.Instructors.FindByInstructorID(row.InstructorID).maxClasses);
+                Room room = new Room(dataBaseHandler.DataSet.Rooms.FindByRoomID(row.RoomID).RoomID,
+                                           dataBaseHandler.DataSet.Rooms.FindByRoomID(row.RoomID).IsLarge,
+                                           dataBaseHandler.DataSet.Rooms.FindByRoomID(row.RoomID).IsLab);
 
+
+                PossibleCourse possibleCourse = new PossibleCourse(course, instructor, row.TimeStart,row.TimeEnd, row.DateOffered, room);
+                //Is possible courses table even needed?
+                possibleCourses.Add(possibleCourse);
+            }
             return possibleCourses;
         }
 
@@ -316,7 +337,7 @@ namespace CourseScheduler
             Console.WriteLine();
             foreach (Course c in courses)
             {
-                Console.WriteLine("{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}", c.courseID, c.name, c.credits, c.needsLabRoom, c.needsLargeRoom, c.isElective, c.hasPrerequisite, c.major, c.capacity);
+                Console.WriteLine("{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}", c.CourseID, c.Name, c.Credits, c.NeedsLabRoom, c.NeedsLargeRoom, c.IsElective, c.Hasrerequisite, c.Major, c.Capacity,c.getCourseLevel().ToString());
             }
             Console.WriteLine();
             foreach (Instructor i in instructors)

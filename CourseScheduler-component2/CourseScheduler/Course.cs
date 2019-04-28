@@ -11,31 +11,39 @@ namespace CourseScheduler
     /// </summary>
     class Course
     {
-        public int courseID;
-        public string name;
-        public int credits;
-        public bool needsLabRoom;
-        public bool needsLargeRoom;
-        public bool isElective;
-        public bool hasPrerequisite;
-        public string major;
-        public int capacity;
-        public int level;
+        public int CourseID;
+        public string Name;
+        public int Credits;
+        public bool NeedsLabRoom;
+        public bool NeedsLargeRoom;
+        public bool IsElective;
+        public bool Hasrerequisite;
+        public string Major;
+        public int Capacity;
 
 
         public Course(int courseID, string name, int credits, bool needsLabRoom, bool needsLargeRoom,
-            bool isElective, bool hasPrerequisite, string major, int capacity, int level)
+            bool isElective, bool hasPrerequisite, string major, int capacity)
         {
-            this.courseID = courseID;
-            this.name = name;
-            this.credits = credits;
-            this.needsLabRoom = needsLabRoom;
-            this.needsLargeRoom = needsLargeRoom;
-            this.isElective = isElective;
-            this.hasPrerequisite = hasPrerequisite;
-            this.major = major;
-            this.capacity = capacity;
-            this.level = level;
+            this.CourseID = courseID;
+            this.Name = name;
+            this.Credits = credits;
+            this.NeedsLabRoom = needsLabRoom;
+            this.NeedsLargeRoom = needsLargeRoom;
+            this.IsElective = isElective;
+            this.Hasrerequisite = hasPrerequisite;
+            this.Major = major;
+            this.Capacity = capacity;
+        }
+
+        public int getCourseLevel()
+        {
+            Int32.TryParse(new String(Name.Where(char.IsDigit).ToArray()),out int level);
+
+            while (level >= 10)
+                level /= 10;
+
+            return level;
         }
     }
 

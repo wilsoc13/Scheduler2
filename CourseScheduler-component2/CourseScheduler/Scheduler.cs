@@ -9,11 +9,11 @@ namespace CourseScheduler
     class Scheduler
     {
         // generate some sample objects
-        Course course1 = new Course(100, "Computer Programming", 3, false, false, false, false, "DMSE", 30,1);
-        Course course2 = new Course(101, "Computer Programming 2", 3, true, true, false, true, "DMSE", 30,1);
-        Course course3 = new Course(210, "Project Management", 3, false, true, false, true, "DMSE", 30,2);
-        Course course4 = new Course(300, "Data Structures & Algorithms", 3, false, true, false, true, "DMSE", 30,3);
-        Course course5 = new Course(302, "Quality Assurance", 3, true, true, false, true, "DMSE", 30,3);
+        Course course1 = new Course(100, "Computer Programming", 3, false, false, false, false, "DMSE", 30);
+        Course course2 = new Course(101, "Computer Programming 2", 3, true, true, false, true, "DMSE", 30);
+        Course course3 = new Course(210, "Project Management", 3, false, true, false, true, "DMSE", 30);
+        Course course4 = new Course(300, "Data Structures & Algorithms", 3, false, true, false, true, "DMSE", 30);
+        Course course5 = new Course(302, "Quality Assurance", 3, true, true, false, true, "DMSE", 30);
 
         Instructor instructor1 = new Instructor("Rick Baker", 001,2);
         Instructor instructor2 = new Instructor("Mohamed Abusharkh", 002,3);
@@ -58,7 +58,7 @@ namespace CourseScheduler
             {
                 for (int i = 0; i < schedule.possibleCourses.Count; i++)
                 {
-                    Console.WriteLine(schedule.possibleCourses[i].course.name);
+                    Console.WriteLine(schedule.possibleCourses[i].course.Name);
                     Console.WriteLine(schedule.possibleCourses[i].startTime);
                     Console.WriteLine(schedule.possibleCourses[i].instructor.name);
                     Console.WriteLine(schedule.possibleCourses[i].endTime);
@@ -119,7 +119,7 @@ namespace CourseScheduler
                         //4. If the room is available
                         for (int r = 0; r < roomList.Count && keepGoing; r++)
                         {
-                            if (courseList[c].needsLabRoom && roomList[r].isLab)
+                            if (courseList[c].NeedsLabRoom && roomList[r].isLab)
                             {
                                 if (roomList[r].roomAvailbility[weekDays + startTime])
                                 {
@@ -128,7 +128,7 @@ namespace CourseScheduler
                                     keepGoing = false;
                                 }
                             }
-                            else if (courseList[c].needsLargeRoom && roomList[r].isLarge)
+                            else if (courseList[c].NeedsLargeRoom && roomList[r].isLarge)
                             {
                                 if (roomList[r].roomAvailbility[weekDays + startTime])
                                 {
@@ -203,7 +203,7 @@ namespace CourseScheduler
                             {
                                 // THIRD: Check that there are no time conflicts with same level classes
                                 //If the course levels are the same
-                                if (unvalidatedSchedule.possibleCourses[i].course.level == unvalidatedSchedule.possibleCourses[j].course.level)
+                                if (unvalidatedSchedule.possibleCourses[i].course.getCourseLevel() == unvalidatedSchedule.possibleCourses[j].course.getCourseLevel())
                                 {
                                     //Remove the conflicted course from the list
                                     isValid = false;
