@@ -361,6 +361,26 @@ namespace CourseScheduler
         {
             doThings();
         }
+
+        /// <summary>
+        /// Generates schedules, first from program database, then from example data in Scheduler class
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Click_Generate_Schedules(object sender, RoutedEventArgs e)
+        {
+            List<Room> rooms = GetRooms();
+            List<Instructor> instructors = GetInstructors();
+            List<Course> courses = GetCourses();
+
+            Scheduler s = new Scheduler();
+            //Schedule scheduleFromDataBase = s.generateScheduleLvl1(courses, s.instructorList, rooms);
+            //s.printSchedule(scheduleFromDataBase);
+
+            Schedule scheduleFromExampleData = s.generateScheduleLvl1(s.courseList, s.instructorList, s.roomList);
+            Console.WriteLine("break. \n\n");
+            s.printSchedule(scheduleFromExampleData);
+        }
     }
 }
 
