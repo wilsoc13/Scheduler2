@@ -373,13 +373,22 @@ namespace CourseScheduler
             List<Instructor> instructors = GetInstructors();
             List<Course> courses = GetCourses();
 
-            Scheduler s = new Scheduler();
+            Scheduler scheduler = new Scheduler();
             //Schedule scheduleFromDataBase = s.generateScheduleLvl1(courses, s.instructorList, rooms);
             //s.printSchedule(scheduleFromDataBase);
 
-            Schedule scheduleFromExampleData = s.generateScheduleLvl1(s.courseList, s.instructorList, s.roomList);
-            Console.WriteLine("break. \n\n");
-            s.printSchedule(scheduleFromExampleData);
+            Schedule scheduleFromExampleData = scheduler.generateScheduleLvl1(scheduler.courseList, scheduler.instructorList, scheduler.roomList);
+            Console.WriteLine("First schedule: \n\n");
+            scheduler.printSchedule(scheduleFromExampleData);
+
+            Console.WriteLine("\n Twenty other schedules: ");
+
+            var manySchedules = scheduler.getTwentySchedules(scheduler.courseList, scheduler.instructorList, scheduler.roomList);
+            manySchedules.ForEach(delegate (Schedule s)
+            {
+                scheduler.printSchedule(s);
+            });
+
         }
     }
 }
