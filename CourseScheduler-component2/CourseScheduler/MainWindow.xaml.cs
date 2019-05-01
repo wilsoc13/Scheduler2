@@ -23,6 +23,7 @@ namespace CourseScheduler
     public partial class MainWindow : Window
     {
         DataBaseHandler dataBaseHandler;
+        private int scheduleID;
 
         public MainWindow()
         {
@@ -40,7 +41,7 @@ namespace CourseScheduler
             dataBaseHandler.FillAdaptersWithDataSet();
             DataGrid_DbTable.ItemsSource = dataBaseHandler.NoRelation_StudentsTableAdapter.GetData();
 
-            GrdReport.ItemsSource = dataBaseHandler.NoRelation_SchedulesTableAdapter.GetData();
+            GrdReport.ItemsSource = dataBaseHandler.SchedulesTableAdapter.GetData();
 
 
         }
@@ -155,37 +156,37 @@ namespace CourseScheduler
             switch (GetDbTableItem())
             {
                 case "Combinations":
-                    DataGrid_DbTable.ItemsSource = dataBaseHandler.NoRelation_CombinationsTableAdapter.GetData();
+                    DataGrid_DbTable.ItemsSource = dataBaseHandler.CombinationsTableAdapter.GetData();
                     break;
                 case "CourseCombinations":
-                    DataGrid_DbTable.ItemsSource = dataBaseHandler.NoRelation_CourseCombinationsTableAdapter.GetData();
+                    DataGrid_DbTable.ItemsSource = dataBaseHandler.CourseCombinationsTableAdapter.GetData();
                     break;
                 case "CourseEnrollments":
-                    DataGrid_DbTable.ItemsSource = dataBaseHandler.NoRelation_CourseEnrollmentsTableAdapter.GetData();
+                    DataGrid_DbTable.ItemsSource = dataBaseHandler.CourseEnrollmentsTableAdapter.GetData();
                     break;
                 case "Courses":
-                    DataGrid_DbTable.ItemsSource = dataBaseHandler.NoRelation_CoursesTableAdapter.GetData();
+                    DataGrid_DbTable.ItemsSource = dataBaseHandler.CoursesTableAdapter.GetData();
                     break;
                 case "InstructorPreferences":
-                    DataGrid_DbTable.ItemsSource = dataBaseHandler.NoRelation_InstructorPreferencesTableAdapter.GetData();
+                    DataGrid_DbTable.ItemsSource = dataBaseHandler.InstructorPreferencesTableAdapter.GetData();
                     break;
                 case "Instructors":
-                    DataGrid_DbTable.ItemsSource = dataBaseHandler.NoRelation_InstructorsTableAdapter.GetData();
+                    DataGrid_DbTable.ItemsSource = dataBaseHandler.InstructorsTableAdapter.GetData();
                     break;
                 case "Join_Schedules_PossibleCourses":
-                    DataGrid_DbTable.ItemsSource = dataBaseHandler.NoRelation_Join_Schedules_PossibleCoursesTableAdapter.GetData();
+                    DataGrid_DbTable.ItemsSource = dataBaseHandler.Join_Schedules_PossibleCoursesTableAdapter.GetData();
                     break;
                 case "PossibleCourses":
-                    DataGrid_DbTable.ItemsSource = dataBaseHandler.NoRelation_PossibleCoursesTableAdapter.GetData();
+                    DataGrid_DbTable.ItemsSource = dataBaseHandler.PossibleCoursesTableAdapter.GetData();
                     break;
                 case "Rooms":
-                    DataGrid_DbTable.ItemsSource = dataBaseHandler.NoRelation_RoomsTableAdapter.GetData();
+                    DataGrid_DbTable.ItemsSource = dataBaseHandler.RoomsTableAdapter.GetData();
                     break;
                 case "Schedules":
-                    DataGrid_DbTable.ItemsSource = dataBaseHandler.NoRelation_SchedulesTableAdapter.GetData();
+                    DataGrid_DbTable.ItemsSource = dataBaseHandler.SchedulesTableAdapter.GetData();
                     break;
                 case "Students":
-                    DataGrid_DbTable.ItemsSource = dataBaseHandler.NoRelation_StudentsTableAdapter.GetData();
+                    DataGrid_DbTable.ItemsSource = dataBaseHandler.StudentsTableAdapter.GetData();
                     break;
                 default:
                     break;
@@ -213,28 +214,116 @@ namespace CourseScheduler
 
         private void Row_DoubleClick(object sender, MouseButtonEventArgs e)
         {
-            SwapToDetailed();
-            grpControls.Visibility = Visibility.Visible;
+
+            DataRowView row = (DataRowView)GrdReport.SelectedItem;
+            if (row != null)
+            {
+                scheduleID = (int)row[0];
+                SwapToDetailed();
+                grpControls.Visibility = Visibility.Visible;
+            }
         }
 
         private void SwapToDetailed()
         {
-            DataTable tbl;
+            GrdReport.ItemsSource = dataBaseHandler.GetPossibleCourses(scheduleID).AsDataView();
+        }
 
-            tbl = dataBaseHandler.GetPossibleCourses(1);
+        private void SwapToWeekly()
+        {
+            Dictionary<string, int> days = new Dictionary<string, int>();
+            days.Add("Monday", 1);
+            days.Add("Tuesday", 2);
+            days.Add("Wednesday", 3);
+            days.Add("Thursday", 4);
+            days.Add("Friday", 5);
 
-            List<int> ids = new List<int>();
+            DataTable weeklyTable = new DataTable();
 
-            foreach (DataRow row in tbl.Rows)
+            DataColumn time = new DataColumn(Name = "Time");
+            DataColumn monday = new DataColumn(Name = "Monday");
+            DataColumn tuesday = new DataColumn(Name = "Tuesday");
+            DataColumn wednesday = new DataColumn(Name = "Wednesday");
+            DataColumn thursday = new DataColumn(Name = "Thursday");
+            DataColumn friday = new DataColumn(Name = "Friday");
+
+
+            weeklyTable.Columns.Add(time);
+            weeklyTable.Columns.Add(monday);
+            weeklyTable.Columns.Add(tuesday);
+            weeklyTable.Columns.Add(wednesday);
+            weeklyTable.Columns.Add(thursday);
+            weeklyTable.Columns.Add(friday);
+
+
+            DataRow eight = weeklyTable.NewRow();
+            eight["Time"] = 8;
+            weeklyTable.Rows.Add(eight);
+
+            DataRow nine = weeklyTable.NewRow();
+            nine["Time"] = 9;
+            weeklyTable.Rows.Add(nine);
+
+            DataRow ten = weeklyTable.NewRow();
+            ten["Time"] = 10;
+            weeklyTable.Rows.Add(ten);
+
+            DataRow eleven = weeklyTable.NewRow();
+            eleven["Time"] = 11;
+            weeklyTable.Rows.Add(eleven);
+
+            DataRow twelve = weeklyTable.NewRow();
+            twelve["Time"] = 12;
+            weeklyTable.Rows.Add(twelve);
+
+            DataRow thirteen = weeklyTable.NewRow();
+            thirteen["Time"] = 13;
+            weeklyTable.Rows.Add(thirteen);
+
+            DataRow fourteen = weeklyTable.NewRow();
+            fourteen["Time"] = 14;
+            weeklyTable.Rows.Add(fourteen);
+
+            DataRow fifteen = weeklyTable.NewRow();
+            fifteen["Time"] = 15;
+            weeklyTable.Rows.Add(fifteen);
+
+            DataRow sixteen = weeklyTable.NewRow();
+            sixteen["Time"] = 16;
+            weeklyTable.Rows.Add(sixteen);
+
+            DataRow seventeen = weeklyTable.NewRow();
+            seventeen["Time"] = 17;
+            weeklyTable.Rows.Add(seventeen);
+
+            DataRow eighteen = weeklyTable.NewRow();
+            eighteen["Time"] = 18;
+            weeklyTable.Rows.Add(eighteen);
+            
+            DataTable dataTbl = dataBaseHandler.GetPossibleCourses(scheduleID);
+
+            foreach(DataRow row in dataTbl.Rows)
             {
-                ids.Add(Convert.ToInt32(row[1]));
+                string day = Convert.ToDateTime(row["DateOffered"]).DayOfWeek.ToString();
+                
+                for(int i = (int)row["TimeStart"] - 8; i < (int)row["TimeEnd"] - 8; i++)
+                {
+                    weeklyTable.Rows[i][days[day]] = row["Name"].ToString();
+                }
+                
             }
 
-            var results = from myRow in tbl.AsEnumerable()
-                          where ids.Contains(myRow.Field<int>("PossibleCourseID"))
-                          select myRow;
+            GrdReport.ItemsSource = weeklyTable.AsDataView();
+        }
 
-            GrdReport.ItemsSource = results;
+        private void BtnShowWeekly_Click(object sender, RoutedEventArgs e)
+        {
+            SwapToWeekly();
+        }
+
+        private void BtnShowOverview_Click(object sender, RoutedEventArgs e)
+        {
+            SwapToDetailed();
         }
 
         // start of logic for saving to database
@@ -390,6 +479,56 @@ namespace CourseScheduler
             });
 
         }
+
+        private void BtnCreateScheduleInfo_Click(object sender, RoutedEventArgs e)
+        {
+            CourseSchedulerDBDataSet.InstructorsDataTable instructorTbl = new CourseSchedulerDBDataSet.InstructorsDataTable();
+
+            CourseSchedulerDBDataSet.CoursesDataTable courseTbl = new CourseSchedulerDBDataSet.CoursesDataTable();
+
+            CourseSchedulerDBDataSet.RoomsDataTable roomTbl = new CourseSchedulerDBDataSet.RoomsDataTable();
+
+            dataBaseHandler.RoomsTableAdapter.Fill(roomTbl);
+
+            dataBaseHandler.CoursesTableAdapter.Fill(courseTbl);
+
+            dataBaseHandler.InstructorsTableAdapter.Fill(instructorTbl);
+
+            dataBaseHandler.InsertNewSchedule(1, 1);
+            dataBaseHandler.InsertNewSchedule(2, 2);
+
+
+            dataBaseHandler.InsertNewPossibleCourse((CourseSchedulerDBDataSet.CoursesRow)courseTbl.Rows[0], (CourseSchedulerDBDataSet.InstructorsRow)instructorTbl.Rows[0], 8, 10,"4/29/2019", (CourseSchedulerDBDataSet.RoomsRow)roomTbl.Rows[0]);
+            dataBaseHandler.InsertNewPossibleCourse((CourseSchedulerDBDataSet.CoursesRow)courseTbl.Rows[1], (CourseSchedulerDBDataSet.InstructorsRow)instructorTbl.Rows[0], 12, 14, "4/30/2019", (CourseSchedulerDBDataSet.RoomsRow)roomTbl.Rows[1]);
+            dataBaseHandler.InsertNewPossibleCourse((CourseSchedulerDBDataSet.CoursesRow)courseTbl.Rows[2], (CourseSchedulerDBDataSet.InstructorsRow)instructorTbl.Rows[0], 16, 17, "4/29/2019", (CourseSchedulerDBDataSet.RoomsRow)roomTbl.Rows[2]);
+        
+            dataBaseHandler.InsertNewPossibleCourse((CourseSchedulerDBDataSet.CoursesRow)courseTbl.Rows[3], (CourseSchedulerDBDataSet.InstructorsRow)instructorTbl.Rows[1], 8, 10, "4/29/2019", (CourseSchedulerDBDataSet.RoomsRow)roomTbl.Rows[3]);
+            dataBaseHandler.InsertNewPossibleCourse((CourseSchedulerDBDataSet.CoursesRow)courseTbl.Rows[4], (CourseSchedulerDBDataSet.InstructorsRow)instructorTbl.Rows[1], 12, 14, "4/30/2019", (CourseSchedulerDBDataSet.RoomsRow)roomTbl.Rows[4]);
+            dataBaseHandler.InsertNewPossibleCourse((CourseSchedulerDBDataSet.CoursesRow)courseTbl.Rows[5], (CourseSchedulerDBDataSet.InstructorsRow)instructorTbl.Rows[1], 16, 17, "4/29/2019", (CourseSchedulerDBDataSet.RoomsRow)roomTbl.Rows[5]);
+
+            CourseSchedulerDBDataSet.PossibleCoursesDataTable tbl = new CourseSchedulerDBDataSet.PossibleCoursesDataTable();
+
+            dataBaseHandler.PossibleCoursesTableAdapter.Fill(tbl);
+
+            CourseSchedulerDBDataSet.SchedulesDataTable scheduleTbl = new CourseSchedulerDBDataSet.SchedulesDataTable();
+
+            dataBaseHandler.SchedulesTableAdapter.Fill(scheduleTbl);
+
+            dataBaseHandler.InsertNewJoin_Schedules_PossibleCourses((CourseSchedulerDBDataSet.SchedulesRow)scheduleTbl.Rows[0], (CourseSchedulerDBDataSet.PossibleCoursesRow)tbl.Rows[0]);
+            dataBaseHandler.InsertNewJoin_Schedules_PossibleCourses((CourseSchedulerDBDataSet.SchedulesRow)scheduleTbl.Rows[0], (CourseSchedulerDBDataSet.PossibleCoursesRow)tbl.Rows[1]);
+            dataBaseHandler.InsertNewJoin_Schedules_PossibleCourses((CourseSchedulerDBDataSet.SchedulesRow)scheduleTbl.Rows[0], (CourseSchedulerDBDataSet.PossibleCoursesRow)tbl.Rows[2]);
+            dataBaseHandler.InsertNewJoin_Schedules_PossibleCourses((CourseSchedulerDBDataSet.SchedulesRow)scheduleTbl.Rows[1], (CourseSchedulerDBDataSet.PossibleCoursesRow)tbl.Rows[3]);
+            dataBaseHandler.InsertNewJoin_Schedules_PossibleCourses((CourseSchedulerDBDataSet.SchedulesRow)scheduleTbl.Rows[1], (CourseSchedulerDBDataSet.PossibleCoursesRow)tbl.Rows[4]);
+            dataBaseHandler.InsertNewJoin_Schedules_PossibleCourses((CourseSchedulerDBDataSet.SchedulesRow)scheduleTbl.Rows[1], (CourseSchedulerDBDataSet.PossibleCoursesRow)tbl.Rows[5]);
+
+        }
+
+        private void TabItem_Loaded(object sender, RoutedEventArgs e)
+        {
+            GrdReport.ItemsSource = dataBaseHandler.SchedulesTableAdapter.GetData();
+        }
+
+        
     }
 }
 
