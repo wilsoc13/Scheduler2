@@ -377,17 +377,29 @@ namespace CourseScheduler
             //Schedule scheduleFromDataBase = s.generateScheduleLvl1(courses, s.instructorList, rooms);
             //s.printSchedule(scheduleFromDataBase);
 
-            Schedule scheduleFromExampleData = scheduler.generateScheduleLvl1(courses, scheduler.instructorList, scheduler.roomList);
-            Console.WriteLine("First schedule: \n\n");
-            scheduler.printSchedule(scheduleFromExampleData);
+            Schedule scheduleFromExampleData = scheduler.generateScheduleLvl1(scheduler.courseList, scheduler.instructorList, scheduler.roomList);
+            //Console.WriteLine("First schedule: \n\n");
+            //scheduler.printSchedule(scheduleFromExampleData);
 
-            Console.WriteLine("\n Twenty other schedules: ");
-
-            var manySchedules = scheduler.getTwentySchedules(courses, scheduler.instructorList, scheduler.roomList);
-            manySchedules.ForEach(delegate (Schedule s)
+            foreach (var possibleCourse in scheduleFromExampleData.possibleCourses)
             {
-                scheduler.printSchedule(s);
-            });
+                scheduleOutput.Text += "Course Name: " + possibleCourse.course.Name + "\n";
+                scheduleOutput.Text += "Instructor Name: " + possibleCourse.instructor.name + "\n";
+                scheduleOutput.Text += "Start Time: " + possibleCourse.startTime.ToString() + "\n";
+                scheduleOutput.Text += "End Time: " + possibleCourse.endTime.ToString() + "\n";
+                scheduleOutput.Text += "Room: " + possibleCourse.room.roomID + "\n";
+                scheduleOutput.Text += "Days Offered: " + possibleCourse.datesOffered + "\n";
+                scheduleOutput.Text += "\n";
+
+            }
+
+            //Console.WriteLine("\n Twenty other schedules: ");
+
+            //var manySchedules = scheduler.getTwentySchedules(courses, scheduler.instructorList, scheduler.roomList);
+            //manySchedules.ForEach(delegate (Schedule s)
+            //{
+            //    scheduler.printSchedule(s);
+            //});
 
         }
     }

@@ -59,8 +59,8 @@ namespace CourseScheduler
             for (int i = 0; i < schedule.possibleCourses.Count; i++)
             {
                 Console.WriteLine(schedule.possibleCourses[i].course.Name);
-                Console.WriteLine(schedule.possibleCourses[i].startTime);
                 Console.WriteLine(schedule.possibleCourses[i].instructor.name);
+                Console.WriteLine(schedule.possibleCourses[i].startTime);
                 Console.WriteLine(schedule.possibleCourses[i].endTime);
                 Console.WriteLine(schedule.possibleCourses[i].room.roomID);
                 Console.WriteLine(schedule.possibleCourses[i].datesOffered);
