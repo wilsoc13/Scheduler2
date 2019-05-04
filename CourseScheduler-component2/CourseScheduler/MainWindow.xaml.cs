@@ -207,14 +207,15 @@ namespace CourseScheduler
 
         private void BtnBack_Click(object sender, RoutedEventArgs e)
         {
-            grpControls.Visibility = Visibility.Hidden;
+            grpControls.Visibility = Visibility.Collapsed;
 
             GrdReport.ItemsSource = dataBaseHandler.NoRelation_SchedulesTableAdapter.GetData();
         }
 
         private void Row_DoubleClick(object sender, MouseButtonEventArgs e)
         {
-
+            if (grpControls.Visibility == Visibility.Visible)
+                return;
             DataRowView row = (DataRowView)GrdReport.SelectedItem;
             if (row != null)
             {
@@ -232,11 +233,11 @@ namespace CourseScheduler
         private void SwapToWeekly()
         {
             Dictionary<string, int> days = new Dictionary<string, int>();
-            days.Add("Monday", 1);
-            days.Add("Tuesday", 2);
-            days.Add("Wednesday", 3);
-            days.Add("Thursday", 4);
-            days.Add("Friday", 5);
+            days.Add("M", 1);
+            days.Add("T", 2);
+            days.Add("W", 3);
+            days.Add("H", 4);
+            days.Add("F", 5);
 
             DataTable weeklyTable = new DataTable();
 
@@ -304,11 +305,16 @@ namespace CourseScheduler
 
             foreach(DataRow row in dataTbl.Rows)
             {
-                string day = Convert.ToDateTime(row["DateOffered"]).DayOfWeek.ToString();
-                
-                for(int i = (int)row["TimeStart"] - 8; i < (int)row["TimeEnd"] - 8; i++)
+                string daysString = row["DateOffered"].ToString();
+                while (daysString.Length > 0)
                 {
-                    weeklyTable.Rows[i][days[day]] = row["Name"].ToString();
+                    string day = daysString.Substring(daysString.Length-1, 1);
+                    daysString = daysString.Remove(daysString.Length-1, 1);
+
+                    for (int i = (int)row["TimeStart"] - 8; i < (int)row["TimeEnd"] - 8; i++)
+                    {
+                        weeklyTable.Rows[i][days[day]] = row["Name"].ToString();
+                    }
                 }
                 
             }
@@ -319,11 +325,15 @@ namespace CourseScheduler
         private void BtnShowWeekly_Click(object sender, RoutedEventArgs e)
         {
             SwapToWeekly();
+            btnShowOverview.Visibility = Visibility.Visible;
+            btnShowWeekly.Visibility = Visibility.Hidden;
         }
 
         private void BtnShowOverview_Click(object sender, RoutedEventArgs e)
         {
             SwapToDetailed();
+            btnShowOverview.Visibility = Visibility.Hidden;
+            btnShowWeekly.Visibility = Visibility.Visible;
         }
 
         // start of logic for saving to database
@@ -510,13 +520,13 @@ namespace CourseScheduler
             dataBaseHandler.InsertNewSchedule(2, 2);
 
 
-            dataBaseHandler.InsertNewPossibleCourse((CourseSchedulerDBDataSet.CoursesRow)courseTbl.Rows[0], (CourseSchedulerDBDataSet.InstructorsRow)instructorTbl.Rows[0], 8, 10,"4/29/2019", (CourseSchedulerDBDataSet.RoomsRow)roomTbl.Rows[0]);
-            dataBaseHandler.InsertNewPossibleCourse((CourseSchedulerDBDataSet.CoursesRow)courseTbl.Rows[1], (CourseSchedulerDBDataSet.InstructorsRow)instructorTbl.Rows[0], 12, 14, "4/30/2019", (CourseSchedulerDBDataSet.RoomsRow)roomTbl.Rows[1]);
-            dataBaseHandler.InsertNewPossibleCourse((CourseSchedulerDBDataSet.CoursesRow)courseTbl.Rows[2], (CourseSchedulerDBDataSet.InstructorsRow)instructorTbl.Rows[0], 16, 17, "4/29/2019", (CourseSchedulerDBDataSet.RoomsRow)roomTbl.Rows[2]);
+            dataBaseHandler.InsertNewPossibleCourse((CourseSchedulerDBDataSet.CoursesRow)courseTbl.Rows[0], (CourseSchedulerDBDataSet.InstructorsRow)instructorTbl.Rows[0], 8, 10,"MW", (CourseSchedulerDBDataSet.RoomsRow)roomTbl.Rows[0]);
+            dataBaseHandler.InsertNewPossibleCourse((CourseSchedulerDBDataSet.CoursesRow)courseTbl.Rows[1], (CourseSchedulerDBDataSet.InstructorsRow)instructorTbl.Rows[0], 12, 14, "TH", (CourseSchedulerDBDataSet.RoomsRow)roomTbl.Rows[1]);
+            dataBaseHandler.InsertNewPossibleCourse((CourseSchedulerDBDataSet.CoursesRow)courseTbl.Rows[2], (CourseSchedulerDBDataSet.InstructorsRow)instructorTbl.Rows[0], 16, 17, "MWF", (CourseSchedulerDBDataSet.RoomsRow)roomTbl.Rows[2]);
         
-            dataBaseHandler.InsertNewPossibleCourse((CourseSchedulerDBDataSet.CoursesRow)courseTbl.Rows[3], (CourseSchedulerDBDataSet.InstructorsRow)instructorTbl.Rows[1], 8, 10, "4/29/2019", (CourseSchedulerDBDataSet.RoomsRow)roomTbl.Rows[3]);
-            dataBaseHandler.InsertNewPossibleCourse((CourseSchedulerDBDataSet.CoursesRow)courseTbl.Rows[4], (CourseSchedulerDBDataSet.InstructorsRow)instructorTbl.Rows[1], 12, 14, "4/30/2019", (CourseSchedulerDBDataSet.RoomsRow)roomTbl.Rows[4]);
-            dataBaseHandler.InsertNewPossibleCourse((CourseSchedulerDBDataSet.CoursesRow)courseTbl.Rows[5], (CourseSchedulerDBDataSet.InstructorsRow)instructorTbl.Rows[1], 16, 17, "4/29/2019", (CourseSchedulerDBDataSet.RoomsRow)roomTbl.Rows[5]);
+            dataBaseHandler.InsertNewPossibleCourse((CourseSchedulerDBDataSet.CoursesRow)courseTbl.Rows[3], (CourseSchedulerDBDataSet.InstructorsRow)instructorTbl.Rows[1], 8, 10, "TF", (CourseSchedulerDBDataSet.RoomsRow)roomTbl.Rows[3]);
+            dataBaseHandler.InsertNewPossibleCourse((CourseSchedulerDBDataSet.CoursesRow)courseTbl.Rows[4], (CourseSchedulerDBDataSet.InstructorsRow)instructorTbl.Rows[1], 12, 14, "MTW", (CourseSchedulerDBDataSet.RoomsRow)roomTbl.Rows[4]);
+            dataBaseHandler.InsertNewPossibleCourse((CourseSchedulerDBDataSet.CoursesRow)courseTbl.Rows[5], (CourseSchedulerDBDataSet.InstructorsRow)instructorTbl.Rows[1], 16, 17, "HF", (CourseSchedulerDBDataSet.RoomsRow)roomTbl.Rows[5]);
 
             CourseSchedulerDBDataSet.PossibleCoursesDataTable tbl = new CourseSchedulerDBDataSet.PossibleCoursesDataTable();
 

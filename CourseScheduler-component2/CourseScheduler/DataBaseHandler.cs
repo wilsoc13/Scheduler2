@@ -198,7 +198,9 @@ namespace CourseScheduler
 
             CourseSchedulerDBDataSetTableAdapters.CourseJoinTableAdapter courseJoinTableAdapter = new CourseSchedulerDBDataSetTableAdapters.CourseJoinTableAdapter();
 
-            return courseJoinTableAdapter.GetScheduleCourse(ID);
+            DataTable tbl = courseJoinTableAdapter.GetScheduleCourse(ID);
+
+            return tbl;
         }
 
         public DataTable GetPossibleData()

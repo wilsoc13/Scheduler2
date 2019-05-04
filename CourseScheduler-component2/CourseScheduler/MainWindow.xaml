@@ -56,24 +56,24 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Reports" Height="30" Width="115" IsSelected="True" Loaded="TabItem_Loaded">
-                <Grid Background="#FF971A1A">
-                    <DataGrid x:Name="GrdReport" HorizontalAlignment="Center" Height="788" Margin="0,105,0,0" VerticalAlignment="Top" Width="990" Background="#FFC3AA66">
+                <Grid Background="#FFC3AA66" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                    <DataGrid x:Name="GrdReport" IsReadOnly="True" HorizontalAlignment="Left"  Margin="0,105,0,0" VerticalAlignment="Top" Width="990" Background="#FFC3AA66">
                         <DataGrid.ItemContainerStyle>
                             <Style TargetType="DataGridRow">
                                 <EventSetter Event="MouseDoubleClick" Handler="Row_DoubleClick"/>
                             </Style>
                         </DataGrid.ItemContainerStyle>
                     </DataGrid>
-                    <GroupBox x:Name="grpControls" Header="Controls" HorizontalAlignment="Left" Height="100" Margin="10,0,0,0" VerticalAlignment="Top" Width="970" Visibility="Hidden">
-                        <Grid HorizontalAlignment="Left" Height="80" Margin="10,10,-2,-12" VerticalAlignment="Top" Width="950">
+                    <GroupBox x:Name="grpControls" Background="#FF971A1A" Header="Controls" HorizontalAlignment="Stretch" Height="100" Margin="10,0,0,0" VerticalAlignment="Top" Width="970" Visibility="Hidden" Foreground="White">
+                        <Grid HorizontalAlignment="Stretch" Height="80" Margin="10,10,-2,-12" VerticalAlignment="Stretch"  Width="950">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="31*"/>
                                 <ColumnDefinition Width="920*"/>
                             </Grid.ColumnDefinitions>
 
-                            <Button x:Name="btnShowOverview" Margin="10,10,823,16" Content="Show Overview" Click="BtnShowOverview_Click" Grid.ColumnSpan="2"/>
+                            <Button x:Name="btnShowOverview" Margin="10,10,823,16" Content="Show Overview" Click="BtnShowOverview_Click" Grid.ColumnSpan="2" Visibility="Hidden"/>
                             <Button x:Name="btnShowWeekly" Content="Show Weekly" Click="BtnShowWeekly_Click" HorizontalAlignment="Left" Margin="121.5,10,0,0" VerticalAlignment="Top" Width="112" Height="54" Grid.Column="1"/>
-                            <Button x:Name="btnBack" Content="&lt; Back" HorizontalAlignment="Left" Margin="815.5,42,0,0" VerticalAlignment="Top" Width="94" Height="27" Click="BtnBack_Click" Grid.Column="1"/>
+                            <Button x:Name="btnBack" Content="&lt; Back" HorizontalAlignment="Left" Margin="815.5,25,0,0" VerticalAlignment="Stretch" Width="94" Height="27" Click="BtnBack_Click" Grid.Column="1"/>
                         </Grid>
                     </GroupBox>
                 </Grid>
