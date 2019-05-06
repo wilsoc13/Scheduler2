@@ -468,6 +468,7 @@ namespace CourseScheduler
         /// <param name="e"></param>
         private void Button_Click_Generate_Schedules(object sender, RoutedEventArgs e)
         {
+            int score;
             List<Room> rooms = GetRooms();
             List<Instructor> instructors = GetInstructors();
             List<Course> courses = GetCourses();
@@ -480,6 +481,8 @@ namespace CourseScheduler
             //Console.WriteLine("First schedule: \n\n");
             //scheduler.printSchedule(scheduleFromExampleData);
 
+            score = ScoreSchedule(scheduleFromExampleData);
+            
             foreach (var possibleCourse in scheduleFromExampleData.possibleCourses)
             {
                 scheduleOutput.Text += "Course Name: " + possibleCourse.course.Name + "\n";
@@ -491,6 +494,7 @@ namespace CourseScheduler
                 scheduleOutput.Text += "\n";
 
             }
+            scheduleOutput.Text += "score: " + score + "\n";
 
             //Console.WriteLine("\n Twenty other schedules: ");
 
@@ -500,6 +504,42 @@ namespace CourseScheduler
             //    scheduler.printSchedule(s);
             //});
 
+        }
+
+        private int ScoreSchedule(Schedule schedule)
+        {
+            int score = 0;
+            int count = 0;
+            int score1 = 0;
+            int score2 = 0;
+            int stuMin = 3;
+            int stuMax = 6;
+
+            int numberOfCourses = schedule.possibleCourses.Count; 
+
+            if (numberOfCourses > stuMin)
+            {
+                score = stuMin * 10;
+                count = stuMax - numberOfCourses;
+                if(count >= 1)
+                {
+                    score1 = count * 5;
+                }
+                else
+                {
+                    score2 = ((stuMax - stuMin) * 5 + (Math.Abs(count) * 2));
+                }
+            }
+            else
+            {
+                score = 0;
+                score1 = 0;
+                score2 = 0;
+            }
+
+            int totalScore = score1 + score2 + score; 
+            return totalScore;
+            
         }
 
         private void BtnCreateScheduleInfo_Click(object sender, RoutedEventArgs e)

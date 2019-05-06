@@ -47,6 +47,8 @@ namespace CourseScheduler
         }
     }
 
+  
+
     /// <summary>
     /// Possible course object, used for determining possible courses for schedule
     /// </summary>
@@ -110,6 +112,8 @@ namespace CourseScheduler
         }
     }
 
+    
+
     /// <summary>
     /// Room object, information about room a course is held in
     /// </summary>
@@ -145,6 +149,8 @@ namespace CourseScheduler
             }
         }
     }
+
+ 
 
     /// <summary>
     /// Object to be generated, a list of courses and a score to determine the relative value of the schedule. 

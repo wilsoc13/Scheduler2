@@ -26,6 +26,9 @@ namespace CourseScheduler
         Room smallRoom3 = new Room("ATC166", false, false);
         Room smallRoom4 = new Room("ATC142", false, false);
 
+        
+
+
         public List<Course> courseList = new List<Course>();
         public List<Instructor> instructorList = new List<Instructor>();
         public List<Room> roomList = new List<Room>();
