@@ -38,7 +38,8 @@ namespace CourseScheduler
 
         public int getCourseLevel()
         {
-            Int32.TryParse(new String(Name.Where(char.IsDigit).ToArray()),out int level);
+            int level;
+            Int32.TryParse(new String(Name.Where(char.IsDigit).ToArray()),out level);
 
             while (level >= 10)
                 level /= 10;

@@ -29,9 +29,10 @@ namespace CourseScheduler.Custom_Controls
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            int cred;
             if (StudentName.Text == null || Cohort.Text == null || GraduationStatus.Text == null || Major.Text == null || CreditsFinished.Text == null)
                 MessageBox.Show("You must enter all fields.", "Error", MessageBoxButton.OK);
-            else if (!int.TryParse(CreditsFinished.Text, out int cred))
+            else if (!int.TryParse(CreditsFinished.Text, out cred))
                 MessageBox.Show("Error parsing credits, it must be an interger.", "Error", MessageBoxButton.OK);
             else
             {

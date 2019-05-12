@@ -96,6 +96,7 @@ namespace CourseScheduler
         public void FillAdaptersWithDataSet()
         {
             // TODO: Check which table is getting updated then only fill that adapter
+            RoomsTableAdapter.Fill(DataSet.Rooms);
             CoursesTableAdapter.Fill(DataSet.Courses);
             StudentsTableAdapter.Fill(DataSet.Students);
             SchedulesTableAdapter.Fill(DataSet.Schedules);
