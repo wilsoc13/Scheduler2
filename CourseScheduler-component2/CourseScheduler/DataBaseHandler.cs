@@ -101,16 +101,16 @@ namespace CourseScheduler
             SchedulesTableAdapter.Fill(DataSet.Schedules);
             InstructorsTableAdapter.Fill(DataSet.Instructors);
             CombinationsTableAdapter.Fill(DataSet.Combinations);
-            PossibleCoursesTableAdapter.Fill(DataSet.PossibleCourses);
+            //PossibleCoursesTableAdapter.Fill(DataSet.PossibleCourses);
             CourseEnrollmentsTableAdapter.Fill(DataSet.CourseEnrollments);
             CourseCombinationsTableAdapter.Fill(DataSet.CourseCombinations);
             InstructorPreferencesTableAdapter.Fill(DataSet.InstructorPreferences);
-            Join_Schedules_PossibleCoursesTableAdapter.Fill(DataSet.Join_Schedules_PossibleCourses);
-            NoRelation_Join_Schedules_PossibleCoursesTableAdapter.Fill(DataSet.NoRelation_Join_Schedules_PossibleCourses);
+            //Join_Schedules_PossibleCoursesTableAdapter.Fill(DataSet.Join_Schedules_PossibleCourses);
+            //NoRelation_Join_Schedules_PossibleCoursesTableAdapter.Fill(DataSet.NoRelation_Join_Schedules_PossibleCourses);
             NoRelation_InstructorPreferencesTableAdapter.Fill(DataSet.NoRelation_InstructorPreferences);
             NoRelation_CourseCombinationsTableAdapter.Fill(DataSet.NoRelation_CourseCombinations);
             NoRelation_CourseEnrollmentsTableAdapter.Fill(DataSet.NoRelation_CourseEnrollments);
-            NoRelation_PossibleCoursesTableAdapter.Fill(DataSet.NoRelation_PossibleCourses);
+            //NoRelation_PossibleCoursesTableAdapter.Fill(DataSet.NoRelation_PossibleCourses);
             NoRelation_CombinationsTableAdapter.Fill(DataSet.NoRelation_Combinations);
             NoRelation_InstructorsTableAdapter.Fill(DataSet.NoRelation_Instructors);
             NoRelation_SchedulesTableAdapter.Fill(DataSet.NoRelation_Schedules);
@@ -141,9 +141,9 @@ namespace CourseScheduler
             DataSet.Students.AddStudentsRow(Name, Cohort, GraduationStatus, Major, CreditsFinished);
             StudentsTableAdapter.Update(DataSet.Students);
         }
-        public void InsertNewInstructor(string Name)
+        public void InsertNewInstructor(string Name, int maxCourses)
         {
-            DataSet.Instructors.AddInstructorsRow(Name);
+            DataSet.Instructors.AddInstructorsRow(Name, maxCourses);
             InstructorsTableAdapter.Update(DataSet.Instructors);
         }
         public void InsertNewCombination(string logicalOperator)
@@ -151,9 +151,9 @@ namespace CourseScheduler
             DataSet.Combinations.AddCombinationsRow(logicalOperator);
             CombinationsTableAdapter.Update(DataSet.Combinations);
         }
-        public void InsertNewPossibleCourse(CourseSchedulerDBDataSet.CoursesRow Course, CourseSchedulerDBDataSet.InstructorsRow Instructor, TimeSpan TimeOffered, DateTime DateOffered, CourseSchedulerDBDataSet.RoomsRow Room)
+        public void InsertNewPossibleCourse(CourseSchedulerDBDataSet.CoursesRow Course, CourseSchedulerDBDataSet.InstructorsRow Instructor, int TimeStart, int TimeEnd, string DateOffered, CourseSchedulerDBDataSet.RoomsRow Room)
         {
-            DataSet.PossibleCourses.AddPossibleCoursesRow(Course, Instructor, TimeOffered, DateOffered, Room);
+            DataSet.PossibleCourses.AddPossibleCoursesRow(Course, Instructor, Room, DateOffered, TimeStart, TimeEnd);
             PossibleCoursesTableAdapter.Update(DataSet.PossibleCourses);
         }
         public void InsertNewCourseEnrollment(CourseSchedulerDBDataSet.StudentsRow StudentRow, CourseSchedulerDBDataSet.CoursesRow CourseRow, string CreditType, string CompletionStatus, string Grade)
@@ -163,7 +163,7 @@ namespace CourseScheduler
         }
         public void InsertNewCourseCombination(CourseSchedulerDBDataSet.CourseCombinationsRow CourseCombination, CourseSchedulerDBDataSet.CoursesRow Course, int SubCombinationID)
         {
-            DataSet.CourseCombinations.AddCourseCombinationsRow(CourseCombination, Course, SubCombinationID);
+            //DataSet.CourseCombinations.AddCourseCombinationsRow(CourseCombination, Course, SubCombinationID);
             CourseCombinationsTableAdapter.Update(DataSet.CourseCombinations);
         }
         public void InsertNewInstructorPreference(CourseSchedulerDBDataSet.InstructorsRow Instructor, CourseSchedulerDBDataSet.CoursesRow Course, TimeSpan TimeOffered, DateTime DateOffered)
@@ -177,13 +177,35 @@ namespace CourseScheduler
             Join_Schedules_PossibleCoursesTableAdapter.Update(DataSet.Join_Schedules_PossibleCourses);
         }
 
-        public DataTable GetPossibleCourses(int ID)
+        public void InsertNewSchedule(int ScheduleID, int score)
         {
-            DataTable tbl = Join_Schedules_PossibleCoursesTableAdapter.GetPossibleCourses(ID);
+            DataRow row =  DataSet.Schedules.NewRow();
+            row[0] = ScheduleID;
+            row[1] = score;
+            DataSet.Schedules.AddSchedulesRow((CourseSchedulerDBDataSet.SchedulesRow)row);
+            SchedulesTableAdapter.Update(DataSet.Schedules);
+        }
 
-            //PossibleCoursesTableAdapter.GetAllPossibleCourses()
+        public DataTable GetPossibleCourses(int ID)
+        {/*
+            DataTable tbl = Join_Schedules_PossibleCoursesTableAdapter.GetData();
+
+            var results = from myRow in tbl.AsEnumerable()
+                          where ((int)myRow[1] == ID)
+                          select myRow;
+
+            return Join_Schedules_PossibleCoursesTableAdapter.GetData();*/
+
+            CourseSchedulerDBDataSetTableAdapters.CourseJoinTableAdapter courseJoinTableAdapter = new CourseSchedulerDBDataSetTableAdapters.CourseJoinTableAdapter();
+
+            DataTable tbl = courseJoinTableAdapter.GetScheduleCourse(ID);
 
             return tbl;
+        }
+
+        public DataTable GetPossibleData()
+        {
+            return PossibleCoursesTableAdapter.GetData();
         }
     }
 }

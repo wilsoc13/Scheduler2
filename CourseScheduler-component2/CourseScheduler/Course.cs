@@ -11,52 +11,65 @@ namespace CourseScheduler
     /// </summary>
     class Course
     {
-        public int courseID;
-        public string name;
-        public int credits;
-        public bool needsLabRoom;
-        public bool needsLargeRoom;
-        public bool isElective;
-        public bool hasPrerequisite;
-        public string major;
-        public int capacity;
+        public int CourseID;
+        public string Name;
+        public int Credits;
+        public bool NeedsLabRoom;
+        public bool NeedsLargeRoom;
+        public bool IsElective;
+        public bool Hasrerequisite;
+        public string Major;
+        public int Capacity;
+
 
         public Course(int courseID, string name, int credits, bool needsLabRoom, bool needsLargeRoom,
             bool isElective, bool hasPrerequisite, string major, int capacity)
         {
-            this.courseID = courseID;
-            this.name = name;
-            this.credits = credits;
-            this.needsLabRoom = needsLabRoom;
-            this.needsLargeRoom = needsLargeRoom;
-            this.isElective = isElective;
-            this.hasPrerequisite = hasPrerequisite;
-            this.major = major;
-            this.capacity = capacity;
+            this.CourseID = courseID;
+            this.Name = name;
+            this.Credits = credits;
+            this.NeedsLabRoom = needsLabRoom;
+            this.NeedsLargeRoom = needsLargeRoom;
+            this.IsElective = isElective;
+            this.Hasrerequisite = hasPrerequisite;
+            this.Major = major;
+            this.Capacity = capacity;
+        }
+
+        public int getCourseLevel()
+        {
+            Int32.TryParse(new String(Name.Where(char.IsDigit).ToArray()),out int level);
+
+            while (level >= 10)
+                level /= 10;
+
+            return level;
         }
     }
+
+  
 
     /// <summary>
     /// Possible course object, used for determining possible courses for schedule
     /// </summary>
     class PossibleCourse
     {
-        public int courseID;
-        public int instructorID;
-        public TimeSpan timeOffered;
-        public DateTime datesOffered;
-        public int scheduleID;
-        public string roomID;
+        public Course course;
+        public Instructor instructor;
+        public int startTime;
+        public int endTime;
+        public string datesOffered;
+        public Room room;
 
-        public PossibleCourse(int courseID, int instructorID, TimeSpan timeOffered,
-            DateTime datesOffered, int scheduleID, string roomID)
+        public PossibleCourse(Course course, Instructor instructor, int startTime,
+            int endTime, string datesOffered, Room room)
         {
-            this.courseID = courseID;
-            this.instructorID = instructorID;
-            this.timeOffered = timeOffered;
+            this.course = course;
+            this.instructor = instructor;
+            this.startTime = startTime;
+            this.endTime = endTime;
             this.datesOffered = datesOffered;
-            this.scheduleID = scheduleID;
-            this.roomID = roomID;
+            this.room = room;
         }
     }
 
@@ -67,10 +80,13 @@ namespace CourseScheduler
     {
         public int instructorID;
         public string name;
-        public Instructor(string name, int instructorID)
+        public int maxCourses;
+
+        public Instructor(string name, int instructorID, int maxCourses)
         {
             this.instructorID = instructorID;
             this.name = name;
+            this.maxCourses = maxCourses;
         }
     }
 
@@ -96,6 +112,8 @@ namespace CourseScheduler
         }
     }
 
+    
+
     /// <summary>
     /// Room object, information about room a course is held in
     /// </summary>
@@ -104,6 +122,7 @@ namespace CourseScheduler
         public string roomID;
         public bool isLarge;
         public bool isLab;
+        public Dictionary<String, bool> roomAvailbility = new Dictionary<string, bool>();
 
         public Room(string roomID, bool isLarge, bool isLab)
         {
@@ -111,21 +130,49 @@ namespace CourseScheduler
             this.isLarge = isLarge;
             this.isLab = isLab;
         }
+
+        public void initializeRoomAvailablity(int startFirstLecture, int startLastLecture)
+        {
+            int start = startFirstLecture;
+            string days = "MW";
+            for (; startFirstLecture < startLastLecture; startFirstLecture += 2)
+            {
+                string key = days + startFirstLecture;
+                roomAvailbility.Add(key, true);
+            }
+            days = "TTH";
+            startFirstLecture = start;
+            for (; startFirstLecture < startLastLecture; startFirstLecture += 2)
+            {
+                string key = days + startFirstLecture;
+                roomAvailbility.Add(key, true);
+            }
+        }
     }
+
+ 
 
     /// <summary>
     /// Object to be generated, a list of courses and a score to determine the relative value of the schedule. 
     /// </summary>
     class Schedule
     {
-        public List<Course> courseList;
+        public List<PossibleCourse> possibleCourses;
         public int score;
+        public int scheduleID;
+        static int idCounter = 0;
 
-        public Schedule(List<Course> courseList, int score)
+        public Schedule(List<PossibleCourse> possibleCourses, int score)
         {
-            this.courseList = courseList;
+            this.possibleCourses = possibleCourses;
             this.score = score;
+            setID();
+        }
+
+        void setID()
+        {
+            idCounter++;
+            this.scheduleID = idCounter;
         }
     }
-
 }
