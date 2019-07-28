@@ -87,28 +87,7 @@ namespace CourseScheduler
             this.maxCourses = maxCourses;
         }
     }
-
-    /// <summary>
-    /// Instructor's preference for courses to teach
-    /// </summary>
-    class InstructorPreference
-    {
-        public int preferredID;
-        public int instructorID;
-        public int courseID;
-        TimeSpan timeOffered;
-        DateTime dateOffered;
-
-        public InstructorPreference(int preferredID, int instructorID, int courseID,
-            TimeSpan timeOffered, DateTime dateOffered)
-        {
-            this.preferredID = preferredID;
-            this.instructorID = instructorID;
-            this.courseID = courseID;
-            this.timeOffered = timeOffered;
-            this.dateOffered = dateOffered;
-        }
-    }
+    //---------------------------HW5 ANTI PATTERN REWORK-----------------------------------------------
 
     /// <summary>
     /// Room object, information about room a course is held in

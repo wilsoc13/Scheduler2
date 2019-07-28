@@ -18,8 +18,6 @@ namespace CourseScheduler
         Instructor instructor1 = new Instructor("Rick Baker", 001, 2);
         Instructor instructor2 = new Instructor("Mohamed Abusharkh", 002, 3);
 
-        InstructorPreference preference1 = new InstructorPreference(1001, 001, 100, new TimeSpan(3, 4, 1, 43), new DateTime(2019, 4, 6, 2, 3, 4));
-
         Room bigRoom = new Room("ATC160", true, true);
         Room smallRoom1 = new Room("ATC158", false, false);
         Room smallRoom2 = new Room("ATC176", false, false);
@@ -115,38 +113,8 @@ namespace CourseScheduler
                 //2.Look through all the courses and the professor isn't maxed
                 for (; c < courseList.Count && maxCoursesCounter < instructorList[i].maxCourses; c++)
                 {
-                    bool keepGoing = true;
-                    //4. If the room is available
-                    for (int r = 0; r < roomList.Count && keepGoing; r++)
-                    {
-                        if (courseList[c].NeedsLabRoom && roomList[r].isLab)
-                        {
-                            if (roomList[r].roomAvailbility[weekDays + startTime])
-                            {
-                                roomList[r].roomAvailbility[weekDays + startTime] = false;
-                                possibleRoom = roomList[r];
-                                keepGoing = false;
-                            }
-                        }
-                        else if (courseList[c].NeedsLargeRoom && roomList[r].isLarge)
-                        {
-                            if (roomList[r].roomAvailbility[weekDays + startTime])
-                            {
-                                roomList[r].roomAvailbility[weekDays + startTime] = false;
-                                possibleRoom = roomList[r];
-                                keepGoing = false;
-                            }
-                        }
-                        else
-                        {
-                            if (roomList[r].roomAvailbility[weekDays + startTime])
-                            {
-                                roomList[r].roomAvailbility[weekDays + startTime] = false;
-                                possibleRoom = roomList[r];
-                                keepGoing = false;
-                            }
-                        }
-                    }
+                    //-----------------------HW5 ANTI PATTERN REWORK-----------------------------------
+                    getRoom(roomList, courseList, startTime, weekDays, c);
                     //5. Assign a time
                     //
                     //6. Add the course
@@ -176,6 +144,44 @@ namespace CourseScheduler
 
             return schedule;
 
+        }
+
+        public Room getRoom(List<Room> roomList, List<Course> courseList, int startTime, string weekDays, int c)
+        {
+            bool keepGoing = true;
+            Room possibleRoom = null;
+            //4. If the room is available
+            for (int r = 0; r < roomList.Count && keepGoing; r++)
+            {
+                if (courseList[c].NeedsLabRoom && roomList[r].isLab)
+                {
+                    if (roomList[r].roomAvailbility[weekDays + startTime])
+                    {
+                        roomList[r].roomAvailbility[weekDays + startTime] = false;
+                        possibleRoom = roomList[r];
+                        keepGoing = false;
+                    }
+                }
+                else if (courseList[c].NeedsLargeRoom && roomList[r].isLarge)
+                {
+                    if (roomList[r].roomAvailbility[weekDays + startTime])
+                    {
+                        roomList[r].roomAvailbility[weekDays + startTime] = false;
+                        possibleRoom = roomList[r];
+                        keepGoing = false;
+                    }
+                }
+                else
+                {
+                    if (roomList[r].roomAvailbility[weekDays + startTime])
+                    {
+                        roomList[r].roomAvailbility[weekDays + startTime] = false;
+                        possibleRoom = roomList[r];
+                        keepGoing = false;
+                    }
+                }
+            }
+            return possibleRoom;
         }
 
         //TODO: Needs rework for validating the schedule

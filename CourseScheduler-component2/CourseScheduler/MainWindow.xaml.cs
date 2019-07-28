@@ -370,16 +370,6 @@ namespace CourseScheduler
         }
 
 
-        private List<InstructorPreference> GetInstructorPreferences()
-        {
-            List<InstructorPreference> instructorPreferences = new List<InstructorPreference>();
-            foreach (var row in dataBaseHandler.DataSet.InstructorPreferences)
-            {
-                instructorPreferences.Add(new InstructorPreference(row.PreferenceID, row.InstructorID, row.CourseID, row.TimeOffered, row.DateOffered));
-            }
-
-            return instructorPreferences;
-        }
 
         private List<PossibleCourse> GetPossibleCourses()
         {
@@ -427,7 +417,6 @@ namespace CourseScheduler
             var rooms = GetRooms();
             var courses = GetCourses();
             var instructors = GetInstructors();
-            var preferences = GetInstructorPreferences();
 
             foreach (Room r in rooms)
             {
@@ -444,10 +433,6 @@ namespace CourseScheduler
                 Console.WriteLine("{0}, {1}", i.name, i.instructorID);
             }
             Console.WriteLine();
-            foreach (InstructorPreference p in preferences)
-            {
-                Console.WriteLine(p);
-            }
 
 
 
